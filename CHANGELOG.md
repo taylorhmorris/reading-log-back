@@ -7,4 +7,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - This CHANGELOG file to document changes
-- A README to introduce the project
+- A README to introduce the project and explain how to launch and test it
+- The Nest starter repository files
