@@ -9,3 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This CHANGELOG file to document changes
 - A README to introduce the project and explain how to launch and test it
 - The Nest starter repository files
+- Create .env to store a default configuration which can be overwritten by a local .env.development file
+
+### Changed
+- Use PORT from the environment instead of always using 3000
