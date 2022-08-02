@@ -11,3 +11,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The Nest starter repository files
 - Create .env to store a default configuration which can be overwritten by a local .env.development file
 - A User route to the API
+- An Author route to the API
