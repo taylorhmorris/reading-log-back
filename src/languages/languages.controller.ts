@@ -7,9 +7,10 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  BadRequestException,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { DeleteResult, UpdateResult } from 'typeorm';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
 import { LanguagesService } from './languages.service';
 import { CreateLanguageDto } from './dto/create-language.dto';
 import { UpdateLanguageDto } from './dto/update-language.dto';
@@ -21,10 +22,24 @@ export class LanguagesController {
   constructor(private readonly languagesService: LanguagesService) {}
 
   @Post()
-  create(
+  @ApiResponse({
+    status: 201,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  async create(
     @Body() createLanguageDto: CreateLanguageDto,
-  ): Promise<CreateLanguageDto & Language> {
-    return this.languagesService.create(createLanguageDto);
+  ): Promise<Language> {
+    try {
+      return await this.languagesService.create(createLanguageDto);
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        throw new BadRequestException(error.message);
+      } else {
+        throw error;
+      }
+    }
   }
 
   @Get()
