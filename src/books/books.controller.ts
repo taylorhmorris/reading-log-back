@@ -7,9 +7,10 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  BadRequestException,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { DeleteResult, UpdateResult } from 'typeorm';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
@@ -21,8 +22,22 @@ export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
   @Post()
-  create(@Body() createBookDto: CreateBookDto): Promise<CreateBookDto & Book> {
-    return this.booksService.create(createBookDto);
+  @ApiResponse({
+    status: 201,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  async create(@Body() createBookDto: CreateBookDto): Promise<Book> {
+    try {
+      return await this.booksService.create(createBookDto);
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        throw new BadRequestException(error.message);
+      } else {
+        throw error;
+      }
+    }
   }
 
   @Get()
