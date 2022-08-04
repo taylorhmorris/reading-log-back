@@ -1,3 +1,6 @@
+import { Author } from '@/authors/entities/author.entity';
+import { Language } from '@/languages/entities/language.entity';
+import { User } from '@/users/entities/user.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { BooksService } from './books.service';
@@ -11,6 +14,9 @@ describe('BooksService', () => {
       providers: [
         BooksService,
         { provide: getRepositoryToken(Book), useValue: jest.fn() },
+        { provide: getRepositoryToken(Author), useValue: jest.fn() },
+        { provide: getRepositoryToken(Language), useValue: jest.fn() },
+        { provide: getRepositoryToken(User), useValue: jest.fn() },
       ],
     }).compile();
 

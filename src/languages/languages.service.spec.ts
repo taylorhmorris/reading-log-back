@@ -1,3 +1,4 @@
+import { User } from '@/users/entities/user.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Language } from './entities/language.entity';
@@ -11,6 +12,7 @@ describe('LanguagesService', () => {
       providers: [
         LanguagesService,
         { provide: getRepositoryToken(Language), useValue: jest.fn() },
+        { provide: getRepositoryToken(User), useValue: jest.fn() },
       ],
     }).compile();
 
