@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { AuthorsModule } from './authors/authors.module';
+import { LanguagesModule } from './languages/languages.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AuthorsModule } from './authors/authors.module';
     }),
     UsersModule,
     AuthorsModule,
+    LanguagesModule,
   ],
   controllers: [],
   providers: [],
