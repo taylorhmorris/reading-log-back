@@ -1,7 +1,13 @@
 import { User } from '@/users/entities/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsPositive } from 'class-validator';
-import { ManyToOne, PrimaryGeneratedColumn, RelationId } from 'typeorm';
+import { IsDate, IsInt, IsNotEmpty, IsPositive } from 'class-validator';
+import {
+  CreateDateColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  RelationId,
+  UpdateDateColumn,
+} from 'typeorm';
 
 export class OwnedEntity {
   @ApiProperty({
@@ -26,4 +32,18 @@ export class OwnedEntity {
   @IsPositive()
   @RelationId((owned: OwnedEntity) => owned.owner)
   ownerId: number;
+
+  @ApiProperty({
+    description: 'Creation Date',
+  })
+  @IsDate()
+  @CreateDateColumn()
+  createAt: Date;
+
+  @ApiProperty({
+    description: 'Last Update Date',
+  })
+  @IsDate()
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
