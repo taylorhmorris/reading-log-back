@@ -1,3 +1,4 @@
+import { User } from '@/users/entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
@@ -10,10 +11,18 @@ export class AuthorsService {
   constructor(
     @InjectRepository(Author)
     private authorRepository: Repository<Author>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
-  create(createAuthorDto: CreateAuthorDto): Promise<CreateAuthorDto & Author> {
-    return this.authorRepository.save(createAuthorDto);
+  async create(createAuthorDto: CreateAuthorDto): Promise<Author> {
+    const author: Author = new Author();
+    author.firstNames = createAuthorDto.firstNames;
+    author.lastName = createAuthorDto.lastName;
+    author.owner = await this.userRepository.findOneByOrFail({
+      id: createAuthorDto.ownerId,
+    });
+    return this.authorRepository.save(author);
   }
 
   findAll(): Promise<Author[]> {

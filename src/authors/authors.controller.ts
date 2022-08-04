@@ -7,9 +7,10 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  BadRequestException,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { DeleteResult, UpdateResult } from 'typeorm';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
 import { AuthorsService } from './authors.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
@@ -21,10 +22,22 @@ export class AuthorsController {
   constructor(private readonly authorsService: AuthorsService) {}
 
   @Post()
-  create(
-    @Body() createAuthorDto: CreateAuthorDto,
-  ): Promise<CreateAuthorDto & Author> {
-    return this.authorsService.create(createAuthorDto);
+  @ApiResponse({
+    status: 201,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  async create(@Body() createAuthorDto: CreateAuthorDto): Promise<Author> {
+    try {
+      return await this.authorsService.create(createAuthorDto);
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        throw new BadRequestException(error.message);
+      } else {
+        throw error;
+      }
+    }
   }
 
   @Get()
