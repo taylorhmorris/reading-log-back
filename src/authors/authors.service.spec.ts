@@ -1,3 +1,4 @@
+import { User } from '@/users/entities/user.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AuthorsService } from './authors.service';
@@ -11,6 +12,7 @@ describe('AuthorsService', () => {
       providers: [
         AuthorsService,
         { provide: getRepositoryToken(Author), useValue: jest.fn() },
+        { provide: getRepositoryToken(User), useValue: jest.fn() },
       ],
     }).compile();
 

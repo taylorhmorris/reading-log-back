@@ -3,7 +3,7 @@ import { OwnedEntity } from '@/common/entities/owned.entity';
 import { Language } from '@/languages/entities/language.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsDate,
+  IsDateString,
   IsInt,
   IsNotEmpty,
   IsOptional,
@@ -63,7 +63,7 @@ export class Book extends OwnedEntity {
   @ApiProperty({
     description: 'Date Publication',
   })
-  @IsDate()
+  @IsDateString()
   @IsOptional()
   @Column({ nullable: true })
   publicationDate?: Date;

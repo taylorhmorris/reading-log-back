@@ -1,6 +1,12 @@
 import { User } from '@/users/entities/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsInt, IsNotEmpty, IsPositive } from 'class-validator';
+import {
+  IsDate,
+  IsInt,
+  IsNotEmpty,
+  IsNotEmptyObject,
+  IsPositive,
+} from 'class-validator';
 import {
   CreateDateColumn,
   ManyToOne,
@@ -22,7 +28,8 @@ export class OwnedEntity {
     description: "The Entity's owner",
   })
   @IsNotEmpty()
-  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @IsNotEmptyObject({ nullable: false })
+  @ManyToOne(() => User, { onDelete: 'CASCADE', nullable: false })
   owner: User;
 
   @ApiProperty({
