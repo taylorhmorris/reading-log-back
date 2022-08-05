@@ -6,6 +6,7 @@ import { AuthorsModule } from './authors/authors.module';
 import { LanguagesModule } from './languages/languages.module';
 import { BooksModule } from './books/books.module';
 import { ReadingsModule } from './readings/readings.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ReadingsModule } from './readings/readings.module';
     LanguagesModule,
     BooksModule,
     ReadingsModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

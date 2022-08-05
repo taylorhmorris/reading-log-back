@@ -6,6 +6,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { QueryUserDto } from './dto/query-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -16,18 +17,18 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<CreateUserDto & User> {
-    const rounds: number | undefined =
-      this.configService.get<number>('NESTJS_SALT_ROUNDS');
-    if (!rounds) {
-      throw 'SaltRounds not set, cannot hash password';
-    }
+    const roundsString: string | undefined =
+      this.configService.get<string>('NESTJS_SALT_ROUNDS');
+    if (!roundsString) throw 'SaltRounds not set, cannot hash password';
+    const rounds: number = parseInt(roundsString);
+    if (!rounds) throw 'SaltRounds not set, cannot hash password';
     const hashedPassword = await bcrypt.hash(createUserDto.password, rounds);
     createUserDto.password = hashedPassword;
     return this.usersRepository.save(createUserDto);
   }
 
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  findAll(query?: QueryUserDto): Promise<User[]> {
+    return this.usersRepository.find({ where: query });
   }
 
   findOne(id: number): Promise<User | null> {
