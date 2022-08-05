@@ -9,13 +9,14 @@ import {
   ParseIntPipe,
   BadRequestException,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
 import { ReadingsService } from './readings.service';
 import { CreateReadingDto } from './dto/create-reading.dto';
 import { UpdateReadingDto } from './dto/update-reading.dto';
 import { Reading } from './entities/reading.entity';
 
+@ApiBearerAuth()
 @ApiTags('readings')
 @Controller('readings')
 export class ReadingsController {
