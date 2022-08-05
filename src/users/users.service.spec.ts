@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -14,6 +15,14 @@ describe('UsersService', () => {
       providers: [
         UsersService,
         { provide: getRepositoryToken(User), useClass: Repository<User> },
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn(() => {
+              return 10;
+            }),
+          },
+        },
       ],
     }).compile();
 
@@ -26,12 +35,14 @@ describe('UsersService', () => {
   });
 
   describe('create()', () => {
-    it('returns a created user on success', () => {
+    it('returns a created user on success', async () => {
       const createUserDto = new CreateUserDto();
       const user = new User();
+      user.email = 'unique';
+      createUserDto.password = 'password';
       jest.spyOn(usersRepository, 'save').mockResolvedValue(user);
-      const ret = service.create(createUserDto);
-      expect(ret).resolves.toBe(user);
+      const ret = await service.create(createUserDto);
+      expect(ret).toBe(user);
     });
   });
 });

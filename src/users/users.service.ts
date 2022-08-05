@@ -1,18 +1,28 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private readonly configService: ConfigService,
   ) {}
 
-  create(createUserDto: CreateUserDto): Promise<CreateUserDto & User> {
+  async create(createUserDto: CreateUserDto): Promise<CreateUserDto & User> {
+    const rounds: number | undefined =
+      this.configService.get<number>('NESTJS_SALT_ROUNDS');
+    if (!rounds) {
+      throw 'SaltRounds not set, cannot hash password';
+    }
+    const hashedPassword = await bcrypt.hash(createUserDto.password, rounds);
+    createUserDto.password = hashedPassword;
     return this.usersRepository.save(createUserDto);
   }
 
