@@ -9,13 +9,14 @@ import {
   ParseIntPipe,
   BadRequestException,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
 import { AuthorsService } from './authors.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { Author } from './entities/author.entity';
 
+@ApiBearerAuth()
 @ApiTags('authors')
 @Controller('authors')
 export class AuthorsController {

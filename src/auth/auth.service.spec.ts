@@ -1,6 +1,7 @@
 import { UsersService } from '@/users/users.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
+import { JwtService } from '@nestjs/jwt';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -11,6 +12,10 @@ describe('AuthService', () => {
         AuthService,
         {
           provide: UsersService,
+          useValue: jest.fn(),
+        },
+        {
+          provide: JwtService,
           useValue: jest.fn(),
         },
       ],
