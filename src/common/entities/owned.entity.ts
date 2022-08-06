@@ -45,7 +45,7 @@ export class OwnedEntity {
   })
   @IsDate()
   @CreateDateColumn()
-  createAt: Date;
+  createdAt: Date;
 
   @ApiProperty({
     description: 'Last Update Date',
