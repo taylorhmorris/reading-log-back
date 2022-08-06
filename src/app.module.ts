@@ -9,6 +9,7 @@ import { ReadingsModule } from './readings/readings.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { NotesModule } from './notes/notes.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     BooksModule,
     ReadingsModule,
     AuthModule,
+    NotesModule,
   ],
   controllers: [],
   providers: [

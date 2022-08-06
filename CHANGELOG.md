@@ -7,12 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - `/auth/login` route to get a token
+- A Note route
 
 ### Changed
 - Require token to access API
 
 ### Security
 - Hash passwords before storing them in the database
+- Remove password from response when creating a new user
 
 ## [0.0.1] - 2022-08-05
 ### Added
