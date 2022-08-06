@@ -14,6 +14,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { User } from './entities/user.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Public } from '@/auth/public.decorator';
 
 @ApiBearerAuth()
 @ApiTags('users')
@@ -21,6 +22,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Public()
   @Post()
   create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserDto);
