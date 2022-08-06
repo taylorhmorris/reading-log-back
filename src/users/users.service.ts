@@ -16,7 +16,7 @@ export class UsersService {
     private readonly configService: ConfigService,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<CreateUserDto & User> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const roundsString: string | undefined =
       this.configService.get<string>('NESTJS_SALT_ROUNDS');
     if (!roundsString) throw 'SaltRounds not set, cannot hash password';

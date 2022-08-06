@@ -11,6 +11,12 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
+  constructor(src: any = undefined) {
+    this.id = src?.id;
+    this.username = src?.username;
+    this.email = src?.email;
+    this.password = src?.password;
+  }
   @ApiProperty({
     description: "The User's id",
   })
