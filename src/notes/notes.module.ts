@@ -6,9 +6,10 @@ import { User } from '@/users/entities/user.entity';
 import { Book } from '@/books/entities/book.entity';
 import { Author } from '@/authors/entities/author.entity';
 import { Reading } from '@/readings/entities/reading.entity';
+import { Note } from './entities/note.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Book, Author, Reading])],
+  imports: [TypeOrmModule.forFeature([Note, User, Book, Author, Reading])],
   controllers: [NotesController],
   providers: [NotesService],
 })
