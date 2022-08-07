@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { NotesModule } from './notes/notes.module';
+import { CaslModule } from './casl/casl.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { NotesModule } from './notes/notes.module';
     ReadingsModule,
     AuthModule,
     NotesModule,
+    CaslModule,
   ],
   controllers: [],
   providers: [

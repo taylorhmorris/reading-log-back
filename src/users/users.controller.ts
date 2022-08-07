@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,6 +16,9 @@ import { DeleteResult, UpdateResult } from 'typeorm';
 import { User } from './entities/user.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from '@/auth/public.decorator';
+import { CheckPolicies } from '@/casl/checkPolicies.decorator';
+import { UpdateUserPolicyHandler } from '@/casl/handlers/UpdateUserPolicy.handler';
+import { UserPoliciesGuard } from '@/casl/guards/userPolicy.guard';
 
 @ApiBearerAuth()
 @ApiTags('users')
@@ -40,6 +44,8 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @UseGuards(UserPoliciesGuard)
+  @CheckPolicies(new UpdateUserPolicyHandler())
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
