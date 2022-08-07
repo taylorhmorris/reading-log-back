@@ -1,3 +1,16 @@
+import { AuthModule } from '@/auth/auth.module';
+import { AuthorsModule } from '@/authors/authors.module';
+import { Author } from '@/authors/entities/author.entity';
+import { BooksModule } from '@/books/books.module';
+import { Book } from '@/books/entities/book.entity';
+import { Language } from '@/languages/entities/language.entity';
+import { LanguagesModule } from '@/languages/languages.module';
+import { Note } from '@/notes/entities/note.entity';
+import { NotesModule } from '@/notes/notes.module';
+import { Reading } from '@/readings/entities/reading.entity';
+import { ReadingsModule } from '@/readings/readings.module';
+import { User } from '@/users/entities/user.entity';
+import { UsersModule } from '@/users/users.module';
 import {
   ClassSerializerInterceptor,
   INestApplication,
@@ -10,10 +23,15 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 export async function prepareTestingApp(): Promise<INestApplication> {
-  const app: INestApplication;
-
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [
+      UsersModule,
+      AuthorsModule,
+      BooksModule,
+      LanguagesModule,
+      ReadingsModule,
+      NotesModule,
+      AuthModule,
       ConfigModule.forRoot({
         cache: true,
         envFilePath: ['.env.test', '.env.development', '.env'],
@@ -28,7 +46,7 @@ export async function prepareTestingApp(): Promise<INestApplication> {
           username: configService.get('DB_USER'),
           password: configService.get('DB_PASSWORD'),
           database: configService.get('DB_NAME'),
-          autoLoadEntities: true,
+          entities: [Author, Book, Language, Note, Reading, User],
           synchronize: configService.get('DB_SYNC'),
           dropSchema: true,
         }),
@@ -37,7 +55,7 @@ export async function prepareTestingApp(): Promise<INestApplication> {
     ],
   }).compile();
 
-  app = moduleFixture.createNestApplication();
+  const app = moduleFixture.createNestApplication();
 
   app.enableVersioning({
     type: VersioningType.URI,
