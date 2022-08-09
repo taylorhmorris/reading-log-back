@@ -9,13 +9,14 @@ import {
   ParseIntPipe,
   BadRequestException,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
 import { LanguagesService } from './languages.service';
 import { CreateLanguageDto } from './dto/create-language.dto';
 import { UpdateLanguageDto } from './dto/update-language.dto';
 import { Language } from './entities/language.entity';
 
+@ApiBearerAuth()
 @ApiTags('languages')
 @Controller('languages')
 export class LanguagesController {

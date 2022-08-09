@@ -11,16 +11,16 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
-import { ReadingsService } from './readings.service';
-import { CreateReadingDto } from './dto/create-reading.dto';
-import { UpdateReadingDto } from './dto/update-reading.dto';
-import { Reading } from './entities/reading.entity';
+import { NotesService } from './notes.service';
+import { CreateNoteDto } from './dto/create-note.dto';
+import { UpdateNoteDto } from './dto/update-note.dto';
+import { Note } from './entities/note.entity';
 
 @ApiBearerAuth()
-@ApiTags('readings')
-@Controller('readings')
-export class ReadingsController {
-  constructor(private readonly readingsService: ReadingsService) {}
+@ApiTags('notes')
+@Controller('notes')
+export class NotesController {
+  constructor(private readonly notesService: NotesService) {}
 
   @Post()
   @ApiResponse({
@@ -29,9 +29,9 @@ export class ReadingsController {
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  async create(@Body() createReadingDto: CreateReadingDto): Promise<Reading> {
+  async create(@Body() createNoteDto: CreateNoteDto): Promise<Note> {
     try {
-      return await this.readingsService.create(createReadingDto);
+      return await this.notesService.create(createNoteDto);
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
         throw new BadRequestException(error.message);
@@ -42,25 +42,25 @@ export class ReadingsController {
   }
 
   @Get()
-  findAll(): Promise<Reading[]> {
-    return this.readingsService.findAll();
+  findAll(): Promise<Note[]> {
+    return this.notesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<Reading | null> {
-    return this.readingsService.findOne(id);
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<Note | null> {
+    return this.notesService.findOne(id);
   }
 
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateReadingDto: UpdateReadingDto,
+    @Body() updateNoteDto: UpdateNoteDto,
   ): Promise<UpdateResult> {
-    return this.readingsService.update(+id, updateReadingDto);
+    return this.notesService.update(+id, updateNoteDto);
   }
 
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
-    return this.readingsService.remove(+id);
+    return this.notesService.remove(+id);
   }
 }
