@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  NotFoundException
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -36,7 +37,9 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number): Promise<User | null> {
-    return this.usersService.findOne(id);
+    const user = this.usersService.findOne(id);
+    if (!user) throw new NotFoundException('User not found.');
+    return user;
   }
 
   @Patch(':id')
@@ -44,11 +47,15 @@ export class UsersController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<UpdateResult> {
-    return this.usersService.update(+id, updateUserDto);
+    const user = this.usersService.update(+id, updateUserDto);
+    if (!user) throw new NotFoundException('User not found.');
+    return user;
   }
 
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
-    return this.usersService.remove(+id);
+    const user = this.usersService.remove(+id);
+    if (!user) throw new NotFoundException('User not found.');
+    return user;
   }
 }
