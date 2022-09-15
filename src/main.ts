@@ -40,6 +40,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   const port = configService.get('PORT');
+  app.enableCors();
   await app.listen(port);
 }
 bootstrap();
