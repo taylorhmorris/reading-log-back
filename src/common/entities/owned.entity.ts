@@ -1,6 +1,7 @@
 import { User } from '@/users/entities/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsBoolean,
   IsDate,
   IsInt,
   IsNotEmpty,
@@ -8,6 +9,7 @@ import {
   IsPositive,
 } from 'class-validator';
 import {
+  Column,
   CreateDateColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -45,7 +47,7 @@ export class OwnedEntity {
   })
   @IsDate()
   @CreateDateColumn()
-  createAt: Date;
+  createdAt: Date;
 
   @ApiProperty({
     description: 'Last Update Date',
@@ -53,4 +55,11 @@ export class OwnedEntity {
   @IsDate()
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ApiProperty({
+    description: 'Whether or not the Entity is Public',
+  })
+  @IsBoolean()
+  @Column({ default: false })
+  isPublic: boolean;
 }

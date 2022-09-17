@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import {
+  IsBoolean,
   IsEmail,
   IsInt,
   IsNotEmpty,
@@ -48,4 +49,12 @@ export class User {
   @Exclude()
   @Column()
   password: string;
+
+  @ApiProperty({
+    description: 'Whether the User is an Admin or not',
+  })
+  @IsBoolean()
+  @Exclude()
+  @Column({ default: false })
+  isAdmin: boolean;
 }
