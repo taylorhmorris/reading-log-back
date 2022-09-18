@@ -19,7 +19,7 @@ async function bootstrap() {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Reading Log')
     .setDescription('Reading Log API')
-    .setVersion('0.0.2')
+    .setVersion('0.0.3')
     .addTag('auth')
     .addTag('users')
     .addBearerAuth()
