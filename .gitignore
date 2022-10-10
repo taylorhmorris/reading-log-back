@@ -19,4 +19,4 @@ lerna-debug.log*
 .vscode/*
 
 # Dev Environment
-.env.development
+.env.local
