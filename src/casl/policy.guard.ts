@@ -40,7 +40,7 @@ export class PoliciesGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const params = request?.client?._httpMessage?.req?.params;
-    const body = request?.client?._httpMessage?.req?.body;
+    // const body = request?.client?._httpMessage?.req?.body;
     const user = await this.usersRepository.findOneByOrFail({
       id: request.user.userId,
     });
