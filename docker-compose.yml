@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+  db:
+    image: postgres:alpine
+    restart: unless-stopped
+    env_file:
+      - .env
+      - .env.local
+    volumes:
+      - reading-log-db:/var/lib/postgresql/data
+      - ./sql/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
+
+  backend:
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ./:/app
+    env_file:
+      - .env
+      - .env.local
+    build:      
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+        - db
+
+volumes:
+  reading-log-db:
