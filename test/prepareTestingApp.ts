@@ -37,6 +37,7 @@ export async function prepareTestingApp(): Promise<INestApplication> {
         cache: true,
         envFilePath: ['.env.test', '.env.local', '.env'],
         isGlobal: true,
+        ignoreEnvVars: true,
       }),
       TypeOrmModule.forRootAsync({
         imports: [ConfigModule],
