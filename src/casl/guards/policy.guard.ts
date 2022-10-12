@@ -13,6 +13,7 @@ import { Subjects } from '../casl-ability.factory';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '@/users/entities/user.entity';
+import { Fields } from '../utils/fields';
 
 @Injectable()
 export class PoliciesGuard implements CanActivate {
@@ -40,7 +41,7 @@ export class PoliciesGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const params = request?.client?._httpMessage?.req?.params;
-    // const body = request?.client?._httpMessage?.req?.body;
+    const fields = request?.client?._httpMessage?.req?.body;
     const user = await this.usersRepository.findOneByOrFail({
       id: request.user.userId,
     });
@@ -57,7 +58,7 @@ export class PoliciesGuard implements CanActivate {
     }
 
     return policyHandlers.every((handler) =>
-      this.execPolicyHandler(handler, ability, subject),
+      this.execPolicyHandler(handler, ability, subject, fields),
     );
   }
 
@@ -65,10 +66,11 @@ export class PoliciesGuard implements CanActivate {
     handler: PolicyHandler,
     ability: AppAbility,
     subject: Subjects,
+    fields: Fields,
   ) {
     if (typeof handler === 'function') {
-      return handler(ability, subject);
+      return handler(ability, subject, fields);
     }
-    return handler.handle(ability, subject);
+    return handler.handle(ability, subject, fields);
   }
 }
