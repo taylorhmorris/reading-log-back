@@ -20,8 +20,7 @@ export class AuthorPoliciesGuard extends PoliciesGuard {
     protected readonly subjectRepository: Repository<Author>,
   ) {
     super(reflector, caslAbilityFactory, configService, usersRepository);
-  }
-  protected getRepository(): Repository<Author> {
-    return this.subjectRepository;
+    this._subjectType = Author;
+    this._subjectRepository = this.usersRepository;
   }
 }
