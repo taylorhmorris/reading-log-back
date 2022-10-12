@@ -20,7 +20,7 @@ import { CheckPolicies } from '@/casl/checkPolicies.decorator';
 import {
   DeleteUserPolicyHandler,
   UpdateUserPolicyHandler,
-} from '@/casl/handlers/UpdateUserPolicy.handler';
+} from '@/casl/handlers/UserPolicy.handler';
 import { UserPoliciesGuard } from '@/casl/guards/userPolicy.guard';
 
 @ApiBearerAuth()
