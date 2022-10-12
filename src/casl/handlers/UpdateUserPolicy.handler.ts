@@ -8,3 +8,10 @@ export class UpdateUserPolicyHandler implements IPolicyHandler {
     return isAuth;
   }
 }
+
+export class DeleteUserPolicyHandler implements IPolicyHandler {
+  handle(ability: AppAbility, subject: Subjects) {
+    const isAuth = ability.can(Action.Delete, subject);
+    return isAuth;
+  }
+}

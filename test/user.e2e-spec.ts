@@ -66,6 +66,14 @@ describe('UserController (e2e)', () => {
     expect(result.body).toEqual({ affected: 1, generatedMaps: [], raw: [] });
   });
 
+  it('/users/1 (PATCH) isAdmin', async () => {
+    const result = await request(app.getHttpServer())
+      .patch('/v1/users/1')
+      .set('Authorization', 'Bearer ' + token)
+      .send({ isAdmin: true });
+    expect(result.status).toBe(400);
+  });
+
   it('/users/1 (GET) after updating user', async () => {
     const result = await request(app.getHttpServer())
       .get('/v1/users/1')
@@ -156,5 +164,19 @@ describe('UserController (e2e)', () => {
         password: '',
       })
       .expect(400);
+  });
+
+  it('/users/2 (DELETE) should be forbidden', () => {
+    return request(app.getHttpServer())
+      .delete('/v1/users/2')
+      .set('Authorization', 'Bearer ' + token)
+      .expect(403);
+  });
+
+  it('/users/1 (DELETE) should return success', () => {
+    return request(app.getHttpServer())
+      .delete('/v1/users/1')
+      .set('Authorization', 'Bearer ' + token)
+      .expect(200);
   });
 });
