@@ -1,4 +1,4 @@
-import { CaslAbilityFactory } from '@/casl/casl-ability.factory';
+import { CaslModule } from '@/casl/casl.module';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -19,11 +19,11 @@ describe('UsersController', () => {
           envFilePath: ['.env.test'],
           isGlobal: true,
         }),
+        CaslModule,
       ],
       controllers: [UsersController],
       providers: [
         { provide: UsersService, useClass: UsersService },
-        { provide: CaslAbilityFactory, useValue: jest.fn() },
         { provide: getRepositoryToken(User), useClass: Repository<User> },
       ],
     }).compile();

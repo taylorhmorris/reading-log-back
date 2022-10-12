@@ -17,8 +17,7 @@ export class UserPoliciesGuard extends PoliciesGuard {
     protected readonly usersRepository: Repository<User>,
   ) {
     super(reflector, caslAbilityFactory, configService, usersRepository);
-  }
-  protected getRepository(): Repository<User> {
-    return this.usersRepository;
+    this._subjectType = User;
+    this._subjectRepository = this.usersRepository;
   }
 }

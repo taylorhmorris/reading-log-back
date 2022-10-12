@@ -1,6 +1,10 @@
 import { CheckPolicies } from '@/casl/checkPolicies.decorator';
 import { AuthorPoliciesGuard } from '@/casl/guards/authorPolicy.guard';
-import { DeleteGenericPolicyHandler, UpdateGenericPolicyHandler } from '@/casl/handlers/GenericPolicy.handler';
+import {
+  CreateGenericPolicyHandler,
+  DeleteGenericPolicyHandler,
+  UpdateGenericPolicyHandler,
+} from '@/casl/handlers/GenericPolicy.handler';
 import {
   Controller,
   Get,
@@ -33,6 +37,8 @@ export class AuthorsController {
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @UseGuards(AuthorPoliciesGuard)
+  @CheckPolicies(new CreateGenericPolicyHandler())
   async create(@Body() createAuthorDto: CreateAuthorDto): Promise<Author> {
     try {
       return await this.authorsService.create(createAuthorDto);

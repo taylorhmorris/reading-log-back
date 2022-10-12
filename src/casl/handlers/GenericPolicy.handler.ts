@@ -3,6 +3,13 @@ import { AppAbility, Subjects } from '../casl-ability.factory';
 import { IPolicyHandler } from './policy.handler';
 import { Fields } from '../utils/fields';
 
+export class CreateGenericPolicyHandler implements IPolicyHandler {
+  handle(ability: AppAbility, subject: Subjects) {
+    const isAuth = ability.can(Action.Create, subject);
+    return isAuth;
+  }
+}
+
 export class UpdateGenericPolicyHandler implements IPolicyHandler {
   handle(ability: AppAbility, subject: Subjects, fields?: Fields) {
     let isAuth = true;

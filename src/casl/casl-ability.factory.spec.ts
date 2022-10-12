@@ -6,6 +6,7 @@ import { Reading } from '@/readings/entities/reading.entity';
 import { User } from '@/users/entities/user.entity';
 import { Action } from './utils/action';
 import { CaslAbilityFactory } from './casl-ability.factory';
+import { OwnedEntity } from '@/common/entities/owned.entity';
 
 describe('CaslAbilityFactory', () => {
   const caslAbilityFactory = new CaslAbilityFactory();
@@ -358,6 +359,50 @@ describe('CaslAbilityFactory', () => {
 
     it('cannot modify isAdmin', () => {
       return expect(ability.can(Action.Update, other, 'isAdmin')).toBe(false);
+    });
+  });
+
+  describe('should not let users create entities for other users', () => {
+    const user: User = {
+      id: 1,
+      isAdmin: false,
+      username: 'bob',
+      password: 'bob',
+      email: 'bob@bob.com',
+    };
+    const ability = caslAbilityFactory.createForUser(user);
+    const entity: OwnedEntity = {
+      ownerId: 2,
+      id: 1,
+      owner: new User(),
+      isPublic: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    it.skip('cannot create if ownerId !== user.id', () => {
+      return expect(ability.can(Action.Create, entity)).toBe(false);
+    });
+
+    it.skip('can create if ownerId === user.id', () => {
+      const user: User = {
+        id: 1,
+        isAdmin: false,
+        username: 'bob',
+        password: 'bob',
+        email: 'bob@bob.com',
+      };
+      const entity2: Author = {
+        ownerId: 1,
+        id: 1,
+        owner: user,
+        isPublic: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        firstNames: 'Mark',
+        lastName: 'Twain',
+      };
+      return expect(ability.can(Action.Create, entity2)).toBe(true);
     });
   });
 });

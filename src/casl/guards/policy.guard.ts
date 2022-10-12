@@ -25,8 +25,15 @@ export class PoliciesGuard implements CanActivate {
     protected readonly usersRepository: Repository<User>,
   ) {}
 
+  _subjectType: Subjects = 'all';
+  _subjectRepository: Repository<any> = this.usersRepository;
+
   protected getRepository(): Repository<any> {
-    throw new ForbiddenException('Invalid Subject');
+    return this._subjectRepository;
+  }
+
+  protected getSubjectType(): Subjects {
+    return this._subjectType;
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -47,12 +54,13 @@ export class PoliciesGuard implements CanActivate {
     });
     const ability = this.caslAbilityFactory.createForUser(user);
 
-    let query = {};
+    let query = undefined;
     if (params && params.id) query = { id: params.id };
     const subjectRepository = this.getRepository();
     let subject: Subjects;
     try {
-      subject = await subjectRepository.findOneByOrFail(query);
+      if (!query) subject = this.getSubjectType();
+      else subject = await subjectRepository.findOneByOrFail(query);
     } catch {
       throw new ForbiddenException('Could not get subject');
     }

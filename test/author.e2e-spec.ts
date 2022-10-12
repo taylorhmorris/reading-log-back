@@ -126,4 +126,18 @@ describe('AuthorController (e2e)', () => {
       expect(result.status).toBe(403);
     });
   });
+
+  describe('Cannot create for another user', () => {
+    it.skip('/authors/ (POST)', async () => {
+      const result = await request(app.getHttpServer())
+        .post('/v1/authors/')
+        .set('Authorization', 'Bearer ' + token2)
+        .send({
+          ownerId: 1,
+          firstNames: 'James',
+          lastName: 'Joyce',
+        });
+      expect(result.status).toBe(403);
+    });
+  });
 });
