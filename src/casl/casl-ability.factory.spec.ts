@@ -301,4 +301,60 @@ describe('CaslAbilityFactory', () => {
       expect(ability.can(Action.Manage, note)).toBe(false);
     });
   });
+
+  describe('should let users modify themselves', () => {
+    const user = new User();
+    user.id = 1;
+    user.isAdmin = false;
+    const ability = caslAbilityFactory.createForUser(user);
+
+    it('can manage username', () => {
+      return expect(ability.can(Action.Manage, user, 'username')).toBe(true);
+    });
+
+    it('can manage email', () => {
+      return expect(ability.can(Action.Manage, user, 'email')).toBe(true);
+    });
+
+    it('can manage password', () => {
+      return expect(ability.can(Action.Manage, user, 'password')).toBe(true);
+    });
+
+    it('cannot modify isAdmin', () => {
+      return expect(ability.can(Action.Update, user, 'isAdmin')).toBe(false);
+    });
+  });
+
+  describe('should let users view other users public info', () => {
+    const user = new User();
+    user.id = 1;
+    user.isAdmin = false;
+    const ability = caslAbilityFactory.createForUser(user);
+    const other = new User();
+    other.id = 2;
+    other.isAdmin = true;
+
+    it.skip('can read username', () => {
+      return expect(ability.can(Action.Read, other, 'username')).toBe(true);
+    });
+    it('cannot update username', () => {
+      return expect(ability.can(Action.Update, other, 'username')).toBe(false);
+    });
+
+    it('cannot read email', () => {
+      return expect(ability.can(Action.Read, other, 'email')).toBe(false);
+    });
+
+    it('cannot read password', () => {
+      return expect(ability.can(Action.Read, other, 'password')).toBe(false);
+    });
+
+    it.skip('can read isAdmin', () => {
+      return expect(ability.can(Action.Read, other, 'isAdmin')).toBe(true);
+    });
+
+    it('cannot modify isAdmin', () => {
+      return expect(ability.can(Action.Update, other, 'isAdmin')).toBe(false);
+    });
+  });
 });
