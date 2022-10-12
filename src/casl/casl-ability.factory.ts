@@ -13,7 +13,7 @@ import {
   InferSubjects,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-import { Action } from './action';
+import { Action } from './utils/action';
 
 export type Subjects =
   | InferSubjects<

@@ -4,7 +4,7 @@ import { Language } from '@/languages/entities/language.entity';
 import { Note } from '@/notes/entities/note.entity';
 import { Reading } from '@/readings/entities/reading.entity';
 import { User } from '@/users/entities/user.entity';
-import { Action } from './action';
+import { Action } from './utils/action';
 import { CaslAbilityFactory } from './casl-ability.factory';
 
 describe('CaslAbilityFactory', () => {
