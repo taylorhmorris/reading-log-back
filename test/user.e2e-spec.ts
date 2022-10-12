@@ -71,7 +71,7 @@ describe('UserController (e2e)', () => {
       .patch('/v1/users/1')
       .set('Authorization', 'Bearer ' + token)
       .send({ isAdmin: true });
-    expect(result.status).toBe(400);
+    expect(result.status).toBe(403);
   });
 
   it('/users/1 (GET) after updating user', async () => {
