@@ -17,11 +17,11 @@ import { User } from './entities/user.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from '@/auth/public.decorator';
 import { CheckPolicies } from '@/casl/checkPolicies.decorator';
-import {
-  DeleteUserPolicyHandler,
-  UpdateUserPolicyHandler,
-} from '@/casl/handlers/UserPolicy.handler';
 import { UserPoliciesGuard } from '@/casl/guards/userPolicy.guard';
+import {
+  DeleteGenericPolicyHandler,
+  UpdateGenericPolicyHandler,
+} from '@/casl/handlers/GenericPolicy.handler';
 
 @ApiBearerAuth()
 @ApiTags('users')
@@ -48,7 +48,7 @@ export class UsersController {
 
   @Patch(':id')
   @UseGuards(UserPoliciesGuard)
-  @CheckPolicies(new UpdateUserPolicyHandler())
+  @CheckPolicies(new UpdateGenericPolicyHandler())
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
@@ -58,7 +58,7 @@ export class UsersController {
 
   @Delete(':id')
   @UseGuards(UserPoliciesGuard)
-  @CheckPolicies(new DeleteUserPolicyHandler())
+  @CheckPolicies(new DeleteGenericPolicyHandler())
   remove(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
     return this.usersService.remove(+id);
   }
