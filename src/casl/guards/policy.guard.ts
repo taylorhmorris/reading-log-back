@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
-import { AppAbility, CaslAbilityFactory } from './casl-ability.factory';
-import { CHECK_POLICIES_KEY } from './checkPolicies.decorator';
-import { PolicyHandler } from './policy.handler';
-import { Subjects } from './casl-ability.factory';
+import { AppAbility, CaslAbilityFactory } from '../casl-ability.factory';
+import { CHECK_POLICIES_KEY } from '../checkPolicies.decorator';
+import { PolicyHandler } from '../handlers/policy.handler';
+import { Subjects } from '../casl-ability.factory';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '@/users/entities/user.entity';
