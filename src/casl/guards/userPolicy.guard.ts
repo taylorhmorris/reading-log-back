@@ -5,7 +5,7 @@ import { Reflector } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CaslAbilityFactory } from '../casl-ability.factory';
-import { PoliciesGuard } from '../policy.guard';
+import { PoliciesGuard } from './policy.guard';
 
 @Injectable()
 export class UserPoliciesGuard extends PoliciesGuard {

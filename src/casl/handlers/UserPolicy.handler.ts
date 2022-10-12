@@ -1,6 +1,6 @@
 import { Action } from '../action';
 import { AppAbility, Subjects } from '../casl-ability.factory';
-import { IPolicyHandler } from '../policy.handler';
+import { IPolicyHandler } from './policy.handler';
 
 export class UpdateUserPolicyHandler implements IPolicyHandler {
   handle(ability: AppAbility, subject: Subjects) {
