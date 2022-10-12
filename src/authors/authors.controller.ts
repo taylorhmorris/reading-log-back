@@ -1,3 +1,6 @@
+import { CheckPolicies } from '@/casl/checkPolicies.decorator';
+import { AuthorPoliciesGuard } from '@/casl/guards/authorPolicy.guard';
+import { DeleteGenericPolicyHandler, UpdateGenericPolicyHandler } from '@/casl/handlers/GenericPolicy.handler';
 import {
   Controller,
   Get,
@@ -8,6 +11,7 @@ import {
   Delete,
   ParseIntPipe,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
@@ -52,6 +56,8 @@ export class AuthorsController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthorPoliciesGuard)
+  @CheckPolicies(new UpdateGenericPolicyHandler())
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateAuthorDto: UpdateAuthorDto,
@@ -60,6 +66,8 @@ export class AuthorsController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthorPoliciesGuard)
+  @CheckPolicies(new DeleteGenericPolicyHandler())
   remove(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
     return this.authorsService.remove(+id);
   }
