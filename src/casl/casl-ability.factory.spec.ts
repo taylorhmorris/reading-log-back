@@ -320,6 +320,9 @@ describe('CaslAbilityFactory', () => {
       return expect(ability.can(Action.Manage, user, 'password')).toBe(true);
     });
 
+    it('can read isAdmin', () => {
+      return expect(ability.can(Action.Read, user, 'isAdmin')).toBe(true);
+    });
     it('cannot modify isAdmin', () => {
       return expect(ability.can(Action.Update, user, 'isAdmin')).toBe(false);
     });
@@ -334,7 +337,7 @@ describe('CaslAbilityFactory', () => {
     other.id = 2;
     other.isAdmin = true;
 
-    it.skip('can read username', () => {
+    it('can read username', () => {
       return expect(ability.can(Action.Read, other, 'username')).toBe(true);
     });
     it('cannot update username', () => {
@@ -349,7 +352,7 @@ describe('CaslAbilityFactory', () => {
       return expect(ability.can(Action.Read, other, 'password')).toBe(false);
     });
 
-    it.skip('can read isAdmin', () => {
+    it('can read isAdmin', () => {
       return expect(ability.can(Action.Read, other, 'isAdmin')).toBe(true);
     });
 

@@ -53,6 +53,15 @@ export class CaslAbilityFactory {
         'You are not allowed to change your own admin status',
       );
 
+      // Users cannot manage other users' information
+      cannot(Action.Manage, User, { id: { $ne: user.id } }).because(
+        "You cannot manage other users' information",
+      );
+
+      // Users can view any username and isAdmin
+      can(Action.Read, User, 'username');
+      can(Action.Read, User, 'isAdmin');
+
       // Users can manage their own Private entities
       can(Action.Manage, allOwnedEntityTypes, {
         ownerId: user.id,
