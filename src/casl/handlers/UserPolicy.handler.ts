@@ -1,4 +1,4 @@
-import { Action } from '../action';
+import { Action } from '../utils/action';
 import { AppAbility, Subjects } from '../casl-ability.factory';
 import { IPolicyHandler } from './policy.handler';
 
