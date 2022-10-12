@@ -16,9 +16,6 @@ services:
       - ${PORT}:${PORT}
     volumes:
       - ./:/app
-    env_file:
-      - .env
-      - .env.local
     build:      
       context: .
       dockerfile: Dockerfile
