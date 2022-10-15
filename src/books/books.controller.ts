@@ -1,3 +1,10 @@
+import { CheckPolicies } from '@/casl/checkPolicies.decorator';
+import { BookPoliciesGuard } from '@/casl/guards/bookPolicy.guard';
+import {
+  CreateGenericPolicyHandler,
+  DeleteGenericPolicyHandler,
+  UpdateGenericPolicyHandler,
+} from '@/casl/handlers/GenericPolicy.handler';
 import {
   Controller,
   Get,
@@ -8,6 +15,7 @@ import {
   Delete,
   ParseIntPipe,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
@@ -29,6 +37,8 @@ export class BooksController {
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @UseGuards(BookPoliciesGuard)
+  @CheckPolicies(new CreateGenericPolicyHandler())
   async create(@Body() createBookDto: CreateBookDto): Promise<Book> {
     try {
       return await this.booksService.create(createBookDto);
@@ -52,6 +62,8 @@ export class BooksController {
   }
 
   @Patch(':id')
+  @UseGuards(BookPoliciesGuard)
+  @CheckPolicies(new UpdateGenericPolicyHandler())
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateBookDto: UpdateBookDto,
@@ -60,6 +72,8 @@ export class BooksController {
   }
 
   @Delete(':id')
+  @UseGuards(BookPoliciesGuard)
+  @CheckPolicies(new DeleteGenericPolicyHandler())
   remove(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
     return this.booksService.remove(+id);
   }
