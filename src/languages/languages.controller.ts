@@ -8,6 +8,7 @@ import {
   Delete,
   ParseIntPipe,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
@@ -15,6 +16,13 @@ import { LanguagesService } from './languages.service';
 import { CreateLanguageDto } from './dto/create-language.dto';
 import { UpdateLanguageDto } from './dto/update-language.dto';
 import { Language } from './entities/language.entity';
+import { LanguagePoliciesGuard } from '@/casl/guards/languagePolicy.guard';
+import { CheckPolicies } from '@/casl/checkPolicies.decorator';
+import {
+  CreateGenericPolicyHandler,
+  DeleteGenericPolicyHandler,
+  UpdateGenericPolicyHandler,
+} from '@/casl/handlers/GenericPolicy.handler';
 
 @ApiBearerAuth()
 @ApiTags('languages')
@@ -29,6 +37,8 @@ export class LanguagesController {
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @UseGuards(LanguagePoliciesGuard)
+  @CheckPolicies(new CreateGenericPolicyHandler())
   async create(
     @Body() createLanguageDto: CreateLanguageDto,
   ): Promise<Language> {
@@ -53,6 +63,8 @@ export class LanguagesController {
     return this.languagesService.findOne(id);
   }
 
+  @UseGuards(LanguagePoliciesGuard)
+  @CheckPolicies(new UpdateGenericPolicyHandler())
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -61,6 +73,8 @@ export class LanguagesController {
     return this.languagesService.update(+id, updateLanguageDto);
   }
 
+  @UseGuards(LanguagePoliciesGuard)
+  @CheckPolicies(new DeleteGenericPolicyHandler())
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
     return this.languagesService.remove(+id);

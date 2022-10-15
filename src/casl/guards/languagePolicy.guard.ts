@@ -20,8 +20,7 @@ export class LanguagePoliciesGuard extends PoliciesGuard {
     protected readonly subjectRepository: Repository<Language>,
   ) {
     super(reflector, caslAbilityFactory, configService, usersRepository);
-  }
-  protected getRepository(): Repository<Language> {
-    return this.subjectRepository;
+    this._subjectType = Language;
+    this._subjectRepository = this.subjectRepository;
   }
 }
