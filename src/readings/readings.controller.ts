@@ -8,6 +8,7 @@ import {
   Delete,
   ParseIntPipe,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
@@ -15,6 +16,13 @@ import { ReadingsService } from './readings.service';
 import { CreateReadingDto } from './dto/create-reading.dto';
 import { UpdateReadingDto } from './dto/update-reading.dto';
 import { Reading } from './entities/reading.entity';
+import { ReadingPoliciesGuard } from '@/casl/guards/readingPolicy.guard';
+import { CheckPolicies } from '@/casl/checkPolicies.decorator';
+import {
+  CreateGenericPolicyHandler,
+  DeleteGenericPolicyHandler,
+  UpdateGenericPolicyHandler,
+} from '@/casl/handlers/GenericPolicy.handler';
 
 @ApiBearerAuth()
 @ApiTags('readings')
@@ -29,6 +37,8 @@ export class ReadingsController {
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @UseGuards(ReadingPoliciesGuard)
+  @CheckPolicies(new CreateGenericPolicyHandler())
   async create(@Body() createReadingDto: CreateReadingDto): Promise<Reading> {
     try {
       return await this.readingsService.create(createReadingDto);
@@ -52,6 +62,8 @@ export class ReadingsController {
   }
 
   @Patch(':id')
+  @UseGuards(ReadingPoliciesGuard)
+  @CheckPolicies(new UpdateGenericPolicyHandler())
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateReadingDto: UpdateReadingDto,
@@ -60,6 +72,8 @@ export class ReadingsController {
   }
 
   @Delete(':id')
+  @UseGuards(ReadingPoliciesGuard)
+  @CheckPolicies(new DeleteGenericPolicyHandler())
   remove(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
     return this.readingsService.remove(+id);
   }
