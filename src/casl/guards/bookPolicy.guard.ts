@@ -20,8 +20,7 @@ export class BookPoliciesGuard extends PoliciesGuard {
     protected readonly subjectRepository: Repository<Book>,
   ) {
     super(reflector, caslAbilityFactory, configService, usersRepository);
-  }
-  protected getRepository(): Repository<Book> {
-    return this.subjectRepository;
+    this._subjectType = Book;
+    this._subjectRepository = this.subjectRepository;
   }
 }
