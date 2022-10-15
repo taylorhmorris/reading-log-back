@@ -21,6 +21,6 @@ export class AuthorPoliciesGuard extends PoliciesGuard {
   ) {
     super(reflector, caslAbilityFactory, configService, usersRepository);
     this._subjectType = Author;
-    this._subjectRepository = this.usersRepository;
+    this._subjectRepository = this.subjectRepository;
   }
 }
