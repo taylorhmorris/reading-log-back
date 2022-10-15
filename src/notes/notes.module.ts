@@ -7,9 +7,13 @@ import { Book } from '@/books/entities/book.entity';
 import { Author } from '@/authors/entities/author.entity';
 import { Reading } from '@/readings/entities/reading.entity';
 import { Note } from './entities/note.entity';
+import { CaslModule } from '@/casl/casl.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Note, User, Book, Author, Reading])],
+  imports: [
+    TypeOrmModule.forFeature([Note, User, Book, Author, Reading]),
+    CaslModule,
+  ],
   controllers: [NotesController],
   providers: [NotesService],
 })
