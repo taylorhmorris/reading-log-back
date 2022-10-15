@@ -100,10 +100,20 @@ describe('AuthorController (e2e)', () => {
   });
 
   describe("Cannot modify other user's authors", () => {
-    it('/authors/ (PATCH)', async () => {
+    it('/authors/ (PATCH) as user2', async () => {
       const result = await request(app.getHttpServer())
         .patch('/v1/authors/1')
         .set('Authorization', 'Bearer ' + token2)
+        .send({
+          firstNames: 'Marcus',
+        });
+      expect(result.status).toBe(403);
+    });
+
+    it('/authors/ (PATCH) as user1', async () => {
+      const result = await request(app.getHttpServer())
+        .patch('/v1/authors/2')
+        .set('Authorization', 'Bearer ' + token1)
         .send({
           firstNames: 'Marcus',
         });
