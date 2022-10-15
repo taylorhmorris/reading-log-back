@@ -20,8 +20,7 @@ export class NotePoliciesGuard extends PoliciesGuard {
     protected readonly subjectRepository: Repository<Note>,
   ) {
     super(reflector, caslAbilityFactory, configService, usersRepository);
-  }
-  protected getRepository(): Repository<Note> {
-    return this.subjectRepository;
+    this._subjectType = Note;
+    this._subjectRepository = this.subjectRepository;
   }
 }
