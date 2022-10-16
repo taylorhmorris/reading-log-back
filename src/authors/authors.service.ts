@@ -1,7 +1,12 @@
 import { User } from '@/users/entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import {
+  DeleteResult,
+  FindManyOptions,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { Author } from './entities/author.entity';
@@ -25,12 +30,12 @@ export class AuthorsService {
     return this.authorRepository.save(author);
   }
 
-  findAll(): Promise<Author[]> {
-    return this.authorRepository.find();
+  findAll(query?: FindManyOptions<Author>): Promise<Author[]> {
+    return this.authorRepository.find(query);
   }
 
   findOne(id: number): Promise<Author | null> {
-    return this.authorRepository.findOneBy({ id: id });
+    return this.authorRepository.findOneByOrFail({ id: id });
   }
 
   update(id: number, updateAuthorDto: UpdateAuthorDto): Promise<UpdateResult> {
