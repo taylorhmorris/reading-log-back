@@ -9,7 +9,7 @@ import { CaslAbilityFactory } from '../casl-ability.factory';
 import { PoliciesGuard } from './policy.guard';
 
 @Injectable()
-export class ReadingPoliciesGuard extends PoliciesGuard {
+export class ReadingPoliciesGuard extends PoliciesGuard<Reading> {
   constructor(
     protected reflector: Reflector,
     protected caslAbilityFactory: CaslAbilityFactory,
@@ -20,7 +20,6 @@ export class ReadingPoliciesGuard extends PoliciesGuard {
     protected readonly subjectRepository: Repository<Reading>,
   ) {
     super(reflector, caslAbilityFactory, configService, usersRepository);
-    this._subjectType = Reading;
     this._subjectRepository = this.subjectRepository;
   }
 }

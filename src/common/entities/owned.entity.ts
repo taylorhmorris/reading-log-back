@@ -18,6 +18,13 @@ import {
 } from 'typeorm';
 
 export class OwnedEntity {
+  constructor(src?: OwnedEntity) {
+    if (src) {
+      this.ownerId = src.ownerId;
+      this.isPublic = src.isPublic;
+    }
+  }
+
   @ApiProperty({
     description: "The Entity's id",
   })
