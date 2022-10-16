@@ -5,6 +5,14 @@ import { Column, Entity } from 'typeorm';
 
 @Entity()
 export class Author extends OwnedEntity {
+  constructor(src?: Author) {
+    super(src);
+    if (src) {
+      this.firstNames = src.firstNames;
+      this.lastName = src.lastName;
+    }
+  }
+
   @ApiProperty({
     description: "The Author's first and middle names",
   })

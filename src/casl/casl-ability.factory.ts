@@ -65,9 +65,12 @@ export class CaslAbilityFactory {
       // Users can manage their own Private entities
       can(Action.Manage, allOwnedEntityTypes, {
         ownerId: user.id,
-        isPublic: false,
       });
+      cannot(Action.Manage, allOwnedEntityTypes, {
+        isPublic: true,
+      }).because('You cannot manage public entities');
       can(Action.Read, allOwnedEntityTypes, { isPublic: true });
+      can(Action.Create, allOwnedEntityTypes, { ownerId: user.id });
 
       // Users cannot delete or modify Public entities
       cannot(Action.Delete, allOwnedEntityTypes, { isPublic: true }).because(

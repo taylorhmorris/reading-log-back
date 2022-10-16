@@ -8,7 +8,7 @@ import { CaslAbilityFactory } from '../casl-ability.factory';
 import { PoliciesGuard } from './policy.guard';
 
 @Injectable()
-export class UserPoliciesGuard extends PoliciesGuard {
+export class UserPoliciesGuard extends PoliciesGuard<User> {
   constructor(
     protected reflector: Reflector,
     protected caslAbilityFactory: CaslAbilityFactory,
@@ -17,7 +17,6 @@ export class UserPoliciesGuard extends PoliciesGuard {
     protected readonly usersRepository: Repository<User>,
   ) {
     super(reflector, caslAbilityFactory, configService, usersRepository);
-    this._subjectType = User;
     this._subjectRepository = this.usersRepository;
   }
 }

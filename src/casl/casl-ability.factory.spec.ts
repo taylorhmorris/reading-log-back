@@ -380,29 +380,15 @@ describe('CaslAbilityFactory', () => {
       updatedAt: new Date(),
     };
 
-    it.skip('cannot create if ownerId !== user.id', () => {
+    it('cannot create if ownerId !== user.id', () => {
       return expect(ability.can(Action.Create, entity)).toBe(false);
     });
 
-    it.skip('can create if ownerId === user.id', () => {
-      const user: User = {
-        id: 1,
-        isAdmin: false,
-        username: 'bob',
-        password: 'bob',
-        email: 'bob@bob.com',
-      };
-      const entity2: Author = {
-        ownerId: 1,
-        id: 1,
-        owner: user,
-        isPublic: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        firstNames: 'Mark',
-        lastName: 'Twain',
-      };
-      return expect(ability.can(Action.Create, entity2)).toBe(true);
+    it('can create if ownerId === user.id', () => {
+      const entity = new Author();
+      entity.ownerId = 1;
+      entity.isPublic = false;
+      return expect(ability.can(Action.Create, entity)).toBe(true);
     });
   });
 });

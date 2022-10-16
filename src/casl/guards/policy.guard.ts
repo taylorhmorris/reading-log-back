@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   ForbiddenException,
   Injectable,
+  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
@@ -16,7 +17,9 @@ import { User } from '@/users/entities/user.entity';
 import { Fields } from '../utils/fields';
 
 @Injectable()
-export class PoliciesGuard implements CanActivate {
+export class PoliciesGuard<T extends Subjects> implements CanActivate {
+  private readonly logger = new Logger(PoliciesGuard.name);
+
   constructor(
     protected reflector: Reflector,
     protected caslAbilityFactory: CaslAbilityFactory,
@@ -25,15 +28,10 @@ export class PoliciesGuard implements CanActivate {
     protected readonly usersRepository: Repository<User>,
   ) {}
 
-  _subjectType: Subjects = 'all';
   _subjectRepository: Repository<any> = this.usersRepository;
 
   protected getRepository(): Repository<any> {
     return this._subjectRepository;
-  }
-
-  protected getSubjectType(): Subjects {
-    return this._subjectType;
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -59,12 +57,16 @@ export class PoliciesGuard implements CanActivate {
     const subjectRepository = this.getRepository();
     let subject: Subjects;
     try {
-      if (!query) subject = this.getSubjectType();
-      else subject = await subjectRepository.findOneByOrFail(query);
+      if (!query) {
+        subject = fields as T;
+      } else subject = await subjectRepository.findOneByOrFail(query);
     } catch {
       throw new ForbiddenException('Could not get subject');
     }
 
+    this.logger.debug(`User: ${JSON.stringify(user)}`);
+    this.logger.debug(`Subject: ${JSON.stringify(subject)}`);
+    this.logger.debug(`Fields: ${JSON.stringify(fields)}`);
     return policyHandlers.every((handler) =>
       this.execPolicyHandler(handler, ability, subject, fields),
     );

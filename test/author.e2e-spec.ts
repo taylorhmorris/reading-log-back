@@ -138,7 +138,7 @@ describe('AuthorController (e2e)', () => {
   });
 
   describe('Cannot create for another user', () => {
-    it.skip('/authors/ (POST)', async () => {
+    it('/authors/ (POST)', async () => {
       const result = await request(app.getHttpServer())
         .post('/v1/authors/')
         .set('Authorization', 'Bearer ' + token2)
