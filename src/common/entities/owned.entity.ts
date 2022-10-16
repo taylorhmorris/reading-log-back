@@ -1,5 +1,6 @@
 import { User } from '@/users/entities/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDate,
@@ -30,6 +31,7 @@ export class OwnedEntity {
   })
   @IsPositive()
   @IsInt()
+  @Type(() => Number)
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -46,6 +48,7 @@ export class OwnedEntity {
   })
   @IsInt()
   @IsPositive()
+  @Type(() => Number)
   @RelationId((owned: OwnedEntity) => owned.owner)
   ownerId: number;
 
@@ -67,6 +70,7 @@ export class OwnedEntity {
     description: 'Whether or not the Entity is Public',
   })
   @IsBoolean()
+  @Type(() => Boolean)
   @Column({ default: false })
   isPublic: boolean;
 }

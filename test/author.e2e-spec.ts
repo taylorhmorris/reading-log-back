@@ -150,4 +150,16 @@ describe('AuthorController (e2e)', () => {
       expect(result.status).toBe(403);
     });
   });
+
+  describe('Private authors do not appear in findAll', () => {
+    it('/authors/ (GET)', async () => {
+      const result = await request(app.getHttpServer())
+        .get('/v1/authors/')
+        .set('Authorization', 'Bearer ' + token2);
+      expect(result.status).toBe(200);
+      for (const author of result.body) {
+        expect(author.ownerId).toBe(2);
+      }
+    });
+  });
 });

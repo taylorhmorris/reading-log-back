@@ -1,3 +1,4 @@
+import { AuthUser } from '@/auth/auth.decorator';
 import { CheckPolicies } from '@/casl/checkPolicies.decorator';
 import { AuthorPoliciesGuard } from '@/casl/guards/authorPolicy.guard';
 import {
@@ -5,6 +6,7 @@ import {
   DeleteGenericPolicyHandler,
   UpdateGenericPolicyHandler,
 } from '@/casl/handlers/GenericPolicy.handler';
+import { AuthUserToken } from '@/common/dto/auth-user-payload.dto';
 import {
   Controller,
   Get,
@@ -16,11 +18,19 @@ import {
   ParseIntPipe,
   BadRequestException,
   UseGuards,
+  Query,
+  Logger,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
+import {
+  DeleteResult,
+  EntityNotFoundError,
+  FindOptionsWhere,
+  UpdateResult,
+} from 'typeorm';
 import { AuthorsService } from './authors.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
+import { QueryAuthorDto } from './dto/query-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { Author } from './entities/author.entity';
 
@@ -28,6 +38,8 @@ import { Author } from './entities/author.entity';
 @ApiTags('authors')
 @Controller('authors')
 export class AuthorsController {
+  private readonly logger = new Logger(AuthorsController.name);
+
   constructor(private readonly authorsService: AuthorsService) {}
 
   @Post()
@@ -52,8 +64,28 @@ export class AuthorsController {
   }
 
   @Get()
-  findAll(): Promise<Author[]> {
-    return this.authorsService.findAll();
+  findAll(
+    @AuthUser() user: AuthUserToken,
+    @Query() query?: QueryAuthorDto,
+  ): Promise<Author[]> {
+    const queries: Array<FindOptionsWhere<Author>> = [];
+    if (query) {
+      this.logger.debug('query: ' + JSON.stringify(query));
+      const queryOwned: FindOptionsWhere<Author> = { ...query };
+      queryOwned.owner = { id: user.userId };
+      const queryPublic = { ...query };
+      queryPublic.isPublic = true;
+
+      if (query.isPublic === undefined || query.isPublic === true)
+        queries.push(queryPublic);
+      if (query.ownerId === undefined || query.ownerId === user.userId)
+        queries.push(queryOwned);
+      this.logger.debug('queryOwned: ' + JSON.stringify(queryOwned));
+      this.logger.debug('queryPublic: ' + JSON.stringify(queryPublic));
+    }
+    return this.authorsService.findAll({
+      where: queries,
+    });
   }
 
   @Get(':id')
