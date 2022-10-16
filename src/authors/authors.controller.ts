@@ -4,6 +4,7 @@ import { AuthorPoliciesGuard } from '@/casl/guards/authorPolicy.guard';
 import {
   CreateGenericPolicyHandler,
   DeleteGenericPolicyHandler,
+  ReadGenericPolicyHandler,
   UpdateGenericPolicyHandler,
 } from '@/casl/handlers/GenericPolicy.handler';
 import { AuthUserToken } from '@/common/dto/auth-user-payload.dto';
@@ -88,6 +89,8 @@ export class AuthorsController {
     });
   }
 
+  @UseGuards(AuthorPoliciesGuard)
+  @CheckPolicies(new ReadGenericPolicyHandler())
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number): Promise<Author | null> {
     return this.authorsService.findOne(id);

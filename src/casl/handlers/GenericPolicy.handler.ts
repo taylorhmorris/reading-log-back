@@ -20,6 +20,21 @@ export class CreateGenericPolicyHandler implements IPolicyHandler {
   }
 }
 
+export class ReadGenericPolicyHandler implements IPolicyHandler {
+  private readonly logger = new Logger(ReadGenericPolicyHandler.name);
+
+  handle(ability: AppAbility, subject: Subjects, fields: Fields) {
+    this.logger.debug(`Subject: ${JSON.stringify(subject)}`);
+    this.logger.debug(`Fields: ${JSON.stringify(fields)}`);
+    const isAuth = ability.can(
+      Action.Read,
+      new OwnedEntity(subject as OwnedEntity),
+    );
+    this.logger.debug(`Is Authorized: ${JSON.stringify(isAuth)}`);
+    return isAuth;
+  }
+}
+
 export class UpdateGenericPolicyHandler implements IPolicyHandler {
   handle(ability: AppAbility, subject: Subjects, fields?: Fields) {
     let isAuth = true;
