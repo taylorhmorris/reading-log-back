@@ -9,12 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Authorization module
 
 ### Changed
-- `/users/` route to pass authorization for PATCH, POST, and DELETE
-- `/authors/` route to pass authorization for PATCH, POST, and DELETE
-- `/books/` route to pass authorization for PATCH, POST, and DELETE
-- `/notes/` route to pass authorization for PATCH, POST, and DELETE
-- `/readings/` route to pass authorization for PATCH, POST, and DELETE
-- `/languages/` route to pass authorization for PATCH, POST, and DELETE
+- `/users/` route to pass authorization for GET, PATCH, POST, and DELETE
+- `/authors/` route to pass authorization for GET, PATCH, POST, and DELETE
+- `/books/` route to pass authorization for GET, PATCH, POST, and DELETE
+- `/notes/` route to pass authorization for GET, PATCH, POST, and DELETE
+- `/readings/` route to pass authorization for GET, PATCH, POST, and DELETE
+- `/languages/` route to pass authorization for GET, PATCH, POST, and DELETE
 
 ## [0.0.3] - 2022-08-09
 ### Added
