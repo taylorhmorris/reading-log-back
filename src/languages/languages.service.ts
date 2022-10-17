@@ -1,7 +1,12 @@
 import { User } from '@/users/entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import {
+  DeleteResult,
+  FindManyOptions,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { CreateLanguageDto } from './dto/create-language.dto';
 import { UpdateLanguageDto } from './dto/update-language.dto';
 import { Language } from './entities/language.entity';
@@ -24,12 +29,12 @@ export class LanguagesService {
     return this.languageRepository.save(language);
   }
 
-  findAll(): Promise<Language[]> {
-    return this.languageRepository.find();
+  findAll(query?: FindManyOptions<Language>): Promise<Language[]> {
+    return this.languageRepository.find(query);
   }
 
   findOne(id: number): Promise<Language | null> {
-    return this.languageRepository.findOneBy({ id: id });
+    return this.languageRepository.findOneByOrFail({ id: id });
   }
 
   update(

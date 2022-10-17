@@ -1,10 +1,14 @@
+import { AuthUser } from '@/auth/auth.decorator';
 import { CheckPolicies } from '@/casl/checkPolicies.decorator';
 import { BookPoliciesGuard } from '@/casl/guards/bookPolicy.guard';
 import {
   CreateGenericPolicyHandler,
   DeleteGenericPolicyHandler,
+  ReadGenericPolicyHandler,
   UpdateGenericPolicyHandler,
 } from '@/casl/handlers/GenericPolicy.handler';
+import { AuthUserToken } from '@/common/dto/auth-user-payload.dto';
+import { getOwnedPublicQuery } from '@/common/getOwnedPublicQuery';
 import {
   Controller,
   Get,
@@ -16,11 +20,13 @@ import {
   ParseIntPipe,
   BadRequestException,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
+import { QueryBookDto } from './dto/query-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { Book } from './entities/book.entity';
 
@@ -52,11 +58,19 @@ export class BooksController {
   }
 
   @Get()
-  findAll(): Promise<Book[]> {
-    return this.booksService.findAll();
+  findAll(
+    @AuthUser() user: AuthUserToken,
+    @Query() query?: QueryBookDto,
+  ): Promise<Book[]> {
+    const queries = getOwnedPublicQuery(user, query);
+    return this.booksService.findAll({
+      where: queries,
+    });
   }
 
   @Get(':id')
+  @UseGuards(BookPoliciesGuard)
+  @CheckPolicies(new ReadGenericPolicyHandler())
   findOne(@Param('id', ParseIntPipe) id: number): Promise<Book | null> {
     return this.booksService.findOne(id);
   }

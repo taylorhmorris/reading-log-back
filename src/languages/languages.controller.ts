@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   BadRequestException,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
@@ -21,8 +22,13 @@ import { CheckPolicies } from '@/casl/checkPolicies.decorator';
 import {
   CreateGenericPolicyHandler,
   DeleteGenericPolicyHandler,
+  ReadGenericPolicyHandler,
   UpdateGenericPolicyHandler,
 } from '@/casl/handlers/GenericPolicy.handler';
+import { getOwnedPublicQuery } from '@/common/getOwnedPublicQuery';
+import { AuthUser } from '@/auth/auth.decorator';
+import { AuthUserToken } from '@/common/dto/auth-user-payload.dto';
+import { QueryLanguageDto } from './dto/query-language.dto';
 
 @ApiBearerAuth()
 @ApiTags('languages')
@@ -54,11 +60,19 @@ export class LanguagesController {
   }
 
   @Get()
-  findAll(): Promise<Language[]> {
-    return this.languagesService.findAll();
+  findAll(
+    @AuthUser() user: AuthUserToken,
+    @Query() query?: QueryLanguageDto,
+  ): Promise<Language[]> {
+    const queries = getOwnedPublicQuery(user, query);
+    return this.languagesService.findAll({
+      where: queries,
+    });
   }
 
   @Get(':id')
+  @UseGuards(LanguagePoliciesGuard)
+  @CheckPolicies(new ReadGenericPolicyHandler())
   findOne(@Param('id', ParseIntPipe) id: number): Promise<Language | null> {
     return this.languagesService.findOne(id);
   }

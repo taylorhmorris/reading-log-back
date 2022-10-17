@@ -3,7 +3,12 @@ import { Language } from '@/languages/entities/language.entity';
 import { User } from '@/users/entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import {
+  DeleteResult,
+  FindManyOptions,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { Book } from './entities/book.entity';
@@ -40,12 +45,12 @@ export class BooksService {
     return this.bookRepository.save(book);
   }
 
-  findAll(): Promise<Book[]> {
-    return this.bookRepository.find();
+  findAll(query?: FindManyOptions<Book>): Promise<Book[]> {
+    return this.bookRepository.find(query);
   }
 
   findOne(id: number): Promise<Book | null> {
-    return this.bookRepository.findOneBy({ id: id });
+    return this.bookRepository.findOneByOrFail({ id: id });
   }
 
   update(id: number, updateBookDto: UpdateBookDto): Promise<UpdateResult> {

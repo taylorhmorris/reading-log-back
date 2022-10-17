@@ -3,8 +3,10 @@ import { Author } from '../entities/author.entity';
 
 export class QueryAuthorDto extends PickType(PartialType(Author), [
   'id',
-  'firstNames',
-  'lastName',
   'ownerId',
   'isPublic',
+  'createdAt',
+  'updatedAt',
+  'firstNames',
+  'lastName',
 ]) {}
