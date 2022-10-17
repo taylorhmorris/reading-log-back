@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   BadRequestException,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
@@ -21,8 +22,13 @@ import { CheckPolicies } from '@/casl/checkPolicies.decorator';
 import {
   CreateGenericPolicyHandler,
   DeleteGenericPolicyHandler,
+  ReadGenericPolicyHandler,
   UpdateGenericPolicyHandler,
 } from '@/casl/handlers/GenericPolicy.handler';
+import { getOwnedPublicQuery } from '@/common/getOwnedPublicQuery';
+import { QueryReadingDto } from './dto/query-reading.dto';
+import { AuthUser } from '@/auth/auth.decorator';
+import { AuthUserToken } from '@/common/dto/auth-user-payload.dto';
 
 @ApiBearerAuth()
 @ApiTags('readings')
@@ -52,11 +58,19 @@ export class ReadingsController {
   }
 
   @Get()
-  findAll(): Promise<Reading[]> {
-    return this.readingsService.findAll();
+  findAll(
+    @AuthUser() user: AuthUserToken,
+    @Query() query?: QueryReadingDto,
+  ): Promise<Reading[]> {
+    const queries = getOwnedPublicQuery(user, query);
+    return this.readingsService.findAll({
+      where: queries,
+    });
   }
 
   @Get(':id')
+  @UseGuards(ReadingPoliciesGuard)
+  @CheckPolicies(new ReadGenericPolicyHandler())
   findOne(@Param('id', ParseIntPipe) id: number): Promise<Reading | null> {
     return this.readingsService.findOne(id);
   }

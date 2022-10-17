@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   BadRequestException,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
@@ -21,8 +22,13 @@ import { CheckPolicies } from '@/casl/checkPolicies.decorator';
 import {
   CreateGenericPolicyHandler,
   DeleteGenericPolicyHandler,
+  ReadGenericPolicyHandler,
   UpdateGenericPolicyHandler,
 } from '@/casl/handlers/GenericPolicy.handler';
+import { AuthUser } from '@/auth/auth.decorator';
+import { AuthUserToken } from '@/common/dto/auth-user-payload.dto';
+import { QueryNoteDto } from './dto/query-note.dto';
+import { getOwnedPublicQuery } from '@/common/getOwnedPublicQuery';
 
 @ApiBearerAuth()
 @ApiTags('notes')
@@ -52,11 +58,19 @@ export class NotesController {
   }
 
   @Get()
-  findAll(): Promise<Note[]> {
-    return this.notesService.findAll();
+  findAll(
+    @AuthUser() user: AuthUserToken,
+    @Query() query?: QueryNoteDto,
+  ): Promise<Note[]> {
+    const queries = getOwnedPublicQuery(user, query);
+    return this.notesService.findAll({
+      where: queries,
+    });
   }
 
   @Get(':id')
+  @UseGuards(NotePoliciesGuard)
+  @CheckPolicies(new ReadGenericPolicyHandler())
   findOne(@Param('id', ParseIntPipe) id: number): Promise<Note | null> {
     return this.notesService.findOne(id);
   }

@@ -71,9 +71,9 @@ export class AuthorsController {
     });
   }
 
+  @Get(':id')
   @UseGuards(AuthorPoliciesGuard)
   @CheckPolicies(new ReadGenericPolicyHandler())
-  @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number): Promise<Author | null> {
     return this.authorsService.findOne(id);
   }
