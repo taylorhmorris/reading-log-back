@@ -123,7 +123,7 @@ describe('AuthorController (e2e)', () => {
     it('/authors/ (GET)', async () => {
       const result = await request(app.getHttpServer())
         .get('/v1/authors/1')
-        .set('Authorization', 'Bearer ' + token2);
+        .set('Authorization', 'Bearer ' + token1);
       expect(result.status).toBe(200);
       expect(result.body.firstNames).toEqual('Mark');
       expect(result.body.lastName).toEqual('Twine');
