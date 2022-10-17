@@ -8,6 +8,7 @@ import {
   UpdateGenericPolicyHandler,
 } from '@/casl/handlers/GenericPolicy.handler';
 import { AuthUserToken } from '@/common/dto/auth-user-payload.dto';
+import { getOwnedPublicQuery } from '@/common/getOwnedPublicQuery';
 import {
   Controller,
   Get,
@@ -23,12 +24,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import {
-  DeleteResult,
-  EntityNotFoundError,
-  FindOptionsWhere,
-  UpdateResult,
-} from 'typeorm';
+import { DeleteResult, EntityNotFoundError, UpdateResult } from 'typeorm';
 import { AuthorsService } from './authors.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { QueryAuthorDto } from './dto/query-author.dto';
@@ -69,21 +65,7 @@ export class AuthorsController {
     @AuthUser() user: AuthUserToken,
     @Query() query?: QueryAuthorDto,
   ): Promise<Author[]> {
-    const queries: Array<FindOptionsWhere<Author>> = [];
-    if (query) {
-      this.logger.debug('query: ' + JSON.stringify(query));
-      const queryOwned: FindOptionsWhere<Author> = { ...query };
-      queryOwned.owner = { id: user.userId };
-      const queryPublic = { ...query };
-      queryPublic.isPublic = true;
-
-      if (query.isPublic === undefined || query.isPublic === true)
-        queries.push(queryPublic);
-      if (query.ownerId === undefined || query.ownerId === user.userId)
-        queries.push(queryOwned);
-      this.logger.debug('queryOwned: ' + JSON.stringify(queryOwned));
-      this.logger.debug('queryPublic: ' + JSON.stringify(queryPublic));
-    }
+    const queries = getOwnedPublicQuery(user, query);
     return this.authorsService.findAll({
       where: queries,
     });
