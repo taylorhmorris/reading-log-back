@@ -2,7 +2,7 @@ import { Book } from '@/books/entities/book.entity';
 import { User } from '@/users/entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { CreateReadingDto } from './dto/create-reading.dto';
 import { UpdateReadingDto } from './dto/update-reading.dto';
 import { Reading } from './entities/reading.entity';
@@ -32,12 +32,12 @@ export class ReadingsService {
     return this.readingRepository.save(reading);
   }
 
-  findAll() {
-    return this.readingRepository.find();
+  findAll(query?: FindManyOptions<Reading>): Promise<Reading[]> {
+    return this.readingRepository.find(query);
   }
 
-  findOne(id: number) {
-    return this.readingRepository.findOneBy({ id: id });
+  findOne(id: number): Promise<Reading | null> {
+    return this.readingRepository.findOneByOrFail({ id: id });
   }
 
   update(id: number, updateReadingDto: UpdateReadingDto) {

@@ -18,9 +18,10 @@ import {
   VersioningType,
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Reflector } from '@nestjs/core';
+import { APP_GUARD, Reflector } from '@nestjs/core';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtAuthGuard } from '@/auth/jwt-auth.guard';
 
 export async function prepareTestingApp(): Promise<INestApplication> {
   const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -34,8 +35,9 @@ export async function prepareTestingApp(): Promise<INestApplication> {
       AuthModule,
       ConfigModule.forRoot({
         cache: true,
-        envFilePath: ['.env.test', '.env.development', '.env'],
+        envFilePath: ['.env.test', '.env.local', '.env'],
         isGlobal: true,
+        ignoreEnvVars: true,
       }),
       TypeOrmModule.forRootAsync({
         imports: [ConfigModule],
@@ -52,6 +54,12 @@ export async function prepareTestingApp(): Promise<INestApplication> {
         }),
         inject: [ConfigService],
       }),
+    ],
+    providers: [
+      {
+        provide: APP_GUARD,
+        useClass: JwtAuthGuard,
+      },
     ],
   }).compile();
 

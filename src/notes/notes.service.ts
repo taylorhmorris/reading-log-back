@@ -4,8 +4,12 @@ import { Reading } from '@/readings/entities/reading.entity';
 import { User } from '@/users/entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { QueryNoteDto } from './dto/query-note.dto';
+import {
+  DeleteResult,
+  FindManyOptions,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { Note } from './entities/note.entity';
@@ -48,12 +52,12 @@ export class NotesService {
     return this.noteRepository.save(note);
   }
 
-  findAll(query?: QueryNoteDto): Promise<Note[]> {
-    return this.noteRepository.find({ where: query });
+  findAll(query?: FindManyOptions<Note>): Promise<Note[]> {
+    return this.noteRepository.find(query);
   }
 
   findOne(id: number): Promise<Note | null> {
-    return this.noteRepository.findOneBy({ id: id });
+    return this.noteRepository.findOneByOrFail({ id: id });
   }
 
   update(id: number, updateNoteDto: UpdateNoteDto): Promise<UpdateResult> {

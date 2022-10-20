@@ -10,25 +10,42 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { NotesModule } from './notes/notes.module';
+import { CaslModule } from './casl/casl.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       cache: true,
-      envFilePath: ['.env.development', '.env'],
+      envFilePath: ['.env.local', '.env'],
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get('DB_HOST'),
-        port: configService.get('DB_PORT'),
-        username: configService.get('DB_USER'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_NAME'),
+        url: configService.get('DATABASE_URL'),
+        host: configService.get('DATABASE_URL')
+          ? undefined
+          : configService.get('DB_HOST'),
+        port: configService.get('DATABASE_URL')
+          ? undefined
+          : configService.get('DB_PORT'),
+        username: configService.get('DATABASE_URL')
+          ? undefined
+          : configService.get('POSTGRES_USER'),
+        password: configService.get('DATABASE_URL')
+          ? undefined
+          : configService.get('POSTGRES_PASSWORD'),
+        database: configService.get('DATABASE_URL')
+          ? undefined
+          : configService.get('DB_NAME'),
         autoLoadEntities: true,
         synchronize: configService.get('DB_SYNC'),
+        ssl: configService.get('DATABASE_URL')
+          ? {
+              rejectUnauthorized: false,
+            }
+          : false,
       }),
       inject: [ConfigService],
     }),
@@ -39,6 +56,7 @@ import { NotesModule } from './notes/notes.module';
     ReadingsModule,
     AuthModule,
     NotesModule,
+    CaslModule,
   ],
   controllers: [],
   providers: [

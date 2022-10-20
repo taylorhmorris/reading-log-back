@@ -1,6 +1,6 @@
 {
   "name": "reading-log-back",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "",
   "author": "",
   "private": true,
@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json --runInBand"
   },
   "dependencies": {
+    "@casl/ability": "^6.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",

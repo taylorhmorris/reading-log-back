@@ -3,6 +3,10 @@ import { Note } from '../entities/note.entity';
 
 export class QueryNoteDto extends PickType(PartialType(Note), [
   'id',
+  'owner',
+  'ownerId',
+  'createdAt',
+  'updatedAt',
   'author',
   'authorId',
   'book',
@@ -11,6 +15,4 @@ export class QueryNoteDto extends PickType(PartialType(Note), [
   'readingId',
   'page',
   'content',
-  'owner',
-  'ownerId',
 ]) {}

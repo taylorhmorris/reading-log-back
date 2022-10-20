@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,6 +16,12 @@ import { DeleteResult, UpdateResult } from 'typeorm';
 import { User } from './entities/user.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from '@/auth/public.decorator';
+import { CheckPolicies } from '@/casl/checkPolicies.decorator';
+import { UserPoliciesGuard } from '@/casl/guards/userPolicy.guard';
+import {
+  DeleteGenericPolicyHandler,
+  UpdateGenericPolicyHandler,
+} from '@/casl/handlers/GenericPolicy.handler';
 
 @ApiBearerAuth()
 @ApiTags('users')
@@ -40,6 +47,8 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @UseGuards(UserPoliciesGuard)
+  @CheckPolicies(new UpdateGenericPolicyHandler())
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
@@ -48,6 +57,8 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @UseGuards(UserPoliciesGuard)
+  @CheckPolicies(new DeleteGenericPolicyHandler())
   remove(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
     return this.usersService.remove(+id);
   }

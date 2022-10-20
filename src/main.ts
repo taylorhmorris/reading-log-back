@@ -19,7 +19,7 @@ async function bootstrap() {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Reading Log')
     .setDescription('Reading Log API')
-    .setVersion('0.0.3')
+    .setVersion('0.0.5')
     .addTag('auth')
     .addTag('users')
     .addBearerAuth()
@@ -40,6 +40,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   const port = configService.get('PORT');
+  app.enableCors();
   await app.listen(port);
 }
 bootstrap();

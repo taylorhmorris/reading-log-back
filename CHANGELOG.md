@@ -6,10 +6,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.5] - 2022-10-19
+### Added
+- Authorization module
+- Dockerfiles to run API with a Postgresql container for development
+
+### Changed
+- `/users/` route to pass authorization for GET, PATCH, POST, and DELETE
+- `/authors/` route to pass authorization for GET, PATCH, POST, and DELETE
+- `/books/` route to pass authorization for GET, PATCH, POST, and DELETE
+- `/notes/` route to pass authorization for GET, PATCH, POST, and DELETE
+- `/readings/` route to pass authorization for GET, PATCH, POST, and DELETE
+- `/languages/` route to pass authorization for GET, PATCH, POST, and DELETE
+
 ## [0.0.3] - 2022-08-09
 ### Added
-- A isPublic column to OwnedEntity
-- A isAdmin column to User
+- isPublic column to OwnedEntity
+- isAdmin column to User
 
 ## [0.0.2] - 2022-08-07
 ### Added
@@ -35,7 +48,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A Book route
 - A Reading route
 
-[Unreleased]: https://github.com/taylorhmorris/reading-log-back/compare/v1.0.0...HEAD
-[0.0.2]: https://github.com/taylorhmorris/reading-log-back/compare/v0.0.2...v0.0.3
+[Unreleased]: https://github.com/taylorhmorris/reading-log-back/compare/v0.0.5...HEAD
+[0.0.5]: https://github.com/taylorhmorris/reading-log-back/compare/v0.0.3...v0.0.5
+[0.0.3]: https://github.com/taylorhmorris/reading-log-back/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/taylorhmorris/reading-log-back/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/taylorhmorris/reading-log-back/releases/tag/v0.0.1
