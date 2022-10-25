@@ -62,11 +62,13 @@ export class UploadsController {
     )
     file: Express.Multer.File,
   ) {
-    this.logger.log(file.fieldname);
-    this.logger.log(file.originalname);
-    this.logger.log(file.mimetype);
-    // this.logger.log(file.buffer);
-    this.logger.log(file.size);
-    throw new NotImplementedException('File uploads are not yet implemented');
+    const buffer = file.buffer;
+    const string = buffer.toString();
+    this.logger.debug(`File "${file.originalname}"`);
+    const json = JSON.parse(string);
+    this.logger.debug(json);
+    throw new NotImplementedException(
+      'File received. Imports not yet implemented',
+    );
   }
 }
