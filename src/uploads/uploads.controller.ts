@@ -1,7 +1,9 @@
 import {
   Controller,
+  HttpStatus,
   Logger,
   NotImplementedException,
+  ParseFilePipeBuilder,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -45,7 +47,21 @@ export class UploadsController {
     status: 501,
     description: 'File uploads are not yet implemented',
   })
-  uploadJSON(@UploadedFile() file: Express.Multer.File) {
+  uploadJSON(
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: 'json',
+        })
+        .addMaxSizeValidator({
+          maxSize: 1000,
+        })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    file: Express.Multer.File,
+  ) {
     this.logger.log(file.fieldname);
     this.logger.log(file.originalname);
     this.logger.log(file.mimetype);
