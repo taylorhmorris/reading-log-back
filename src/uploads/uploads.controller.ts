@@ -5,7 +5,6 @@ import {
   HttpStatus,
   InternalServerErrorException,
   Logger,
-  NotImplementedException,
   ParseFilePipeBuilder,
   Post,
   UploadedFile,

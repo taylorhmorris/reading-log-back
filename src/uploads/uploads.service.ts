@@ -8,12 +8,7 @@ import { LanguagesService } from '@/languages/languages.service';
 import { NotesService } from '@/notes/notes.service';
 import { CreateReadingDto } from '@/readings/dto/create-reading.dto';
 import { ReadingsService } from '@/readings/readings.service';
-import {
-  BadRequestException,
-  Injectable,
-  Logger,
-  NotImplementedException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class UploadsService {

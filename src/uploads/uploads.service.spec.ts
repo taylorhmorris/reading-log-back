@@ -5,8 +5,6 @@ import { ModuleMocker, MockFunctionMetadata } from 'jest-mock';
 
 const moduleMocker = new ModuleMocker(global);
 
-let NEXT_ID = 0;
-
 describe('UploadsService', () => {
   let service: UploadsService;
 
@@ -21,12 +19,6 @@ describe('UploadsService', () => {
       ],
     })
       .useMocker((token) => {
-        if (token === AuthorsService)
-          return {
-            create: jest.fn().mockImplementation(() => {
-              id: NEXT_ID++;
-            }),
-          };
         if (typeof token === 'function') {
           const mockMetadata = moduleMocker.getMetadata(
             token,
