@@ -11,5 +11,6 @@ import { CaslModule } from '@/casl/casl.module';
   imports: [TypeOrmModule.forFeature([Reading, User, Book]), CaslModule],
   controllers: [ReadingsController],
   providers: [ReadingsService],
+  exports: [ReadingsService],
 })
 export class ReadingsModule {}
