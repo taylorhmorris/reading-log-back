@@ -11,4 +11,5 @@ export class QueryReadingDto extends PickType(PartialType(Reading), [
   'bookId',
   'startDate',
   'endDate',
+  'pagesRead',
 ]) {}

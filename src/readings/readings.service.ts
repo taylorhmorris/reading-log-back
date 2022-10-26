@@ -21,6 +21,10 @@ export class ReadingsService {
   async create(createReadingDto: CreateReadingDto): Promise<Reading> {
     const reading: Reading = new Reading();
     reading.startDate = createReadingDto.startDate;
+    reading.endDate = createReadingDto.endDate;
+    reading.pagesRead = createReadingDto.pagesRead
+      ? createReadingDto.pagesRead
+      : 0;
     reading.ownerId = createReadingDto.ownerId;
     reading.owner = await this.userRepository.findOneByOrFail({
       id: createReadingDto.ownerId,
