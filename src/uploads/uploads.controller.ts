@@ -1,6 +1,9 @@
+import { AuthUser } from '@/auth/auth.decorator';
+import { AuthUserToken } from '@/common/dto/auth-user-payload.dto';
 import {
   Controller,
   HttpStatus,
+  InternalServerErrorException,
   Logger,
   NotImplementedException,
   ParseFilePipeBuilder,
@@ -44,17 +47,22 @@ export class UploadsController {
     type: FileUploadDto,
   })
   @ApiResponse({
+    status: 201,
+    description: 'Entries successfully imported',
+  })
+  @ApiResponse({
     status: 501,
     description: 'File uploads are not yet implemented',
   })
-  uploadJSON(
+  async uploadJSON(
+    @AuthUser() user: AuthUserToken,
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
           fileType: 'json',
         })
         .addMaxSizeValidator({
-          maxSize: 1000,
+          maxSize: 100000,
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -67,8 +75,7 @@ export class UploadsController {
     this.logger.debug(`File "${file.originalname}"`);
     const json = JSON.parse(string);
     this.logger.debug(json);
-    throw new NotImplementedException(
-      'File received. Imports not yet implemented',
-    );
+    if (await this.uploadsService.parseJSON(user, json)) return;
+    throw new InternalServerErrorException('Could not import entries');
   }
 }
