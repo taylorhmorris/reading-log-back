@@ -16,5 +16,6 @@ import { CaslModule } from '@/casl/casl.module';
   ],
   controllers: [NotesController],
   providers: [NotesService],
+  exports: [NotesService],
 })
 export class NotesModule {}

@@ -15,5 +15,6 @@ import { CaslModule } from '@/casl/casl.module';
   ],
   controllers: [BooksController],
   providers: [BooksService],
+  exports: [BooksService],
 })
 export class BooksModule {}

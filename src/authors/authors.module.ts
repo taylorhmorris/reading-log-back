@@ -10,5 +10,6 @@ import { CaslModule } from '@/casl/casl.module';
   imports: [TypeOrmModule.forFeature([Author, User]), CaslModule],
   controllers: [AuthorsController],
   providers: [AuthorsService],
+  exports: [AuthorsService],
 })
 export class AuthorsModule {}

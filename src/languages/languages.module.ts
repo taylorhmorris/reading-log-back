@@ -10,5 +10,6 @@ import { CaslModule } from '@/casl/casl.module';
   imports: [TypeOrmModule.forFeature([Language, User]), CaslModule],
   controllers: [LanguagesController],
   providers: [LanguagesService],
+  exports: [LanguagesService],
 })
 export class LanguagesModule {}

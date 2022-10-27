@@ -11,6 +11,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { NotesModule } from './notes/notes.module';
 import { CaslModule } from './casl/casl.module';
+import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { CaslModule } from './casl/casl.module';
     AuthModule,
     NotesModule,
     CaslModule,
+    UploadsModule,
   ],
   controllers: [],
   providers: [

@@ -62,7 +62,7 @@ export class Note extends OwnedEntity {
   reading?: Reading;
 
   @ApiProperty({
-    description: 'The id of the Author',
+    description: 'The id of the Reading',
   })
   @IsOptional()
   @IsInt()
